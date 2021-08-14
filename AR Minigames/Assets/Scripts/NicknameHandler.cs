@@ -16,7 +16,8 @@ public class NicknameHandler : MonoBehaviour
 
     private const string placeholderText = "Enter text...";
     private const string nicknameErrorText = "Nickname not acceptable";
-    private const string regexPattern = "[A-Za-z]+\\s?";
+    private const string regexPattern = "(\\w+[\\s+]?)";
+    private const string restrictionPattern = "[^A-Za-z0-9_ ]";
 
     public event Action OnNicknameConfirmation;
 
@@ -26,14 +27,25 @@ public class NicknameHandler : MonoBehaviour
 
     private void Awake()
     {
-        nicknameInputField.onSelect.AddListener(str => SetPlaceholderText(placeholderText,textColor));
+        nicknameInputField.onSelect.AddListener(call => SetPlaceholderText(placeholderText, textColor));
+        nicknameInputField.onValueChanged.AddListener(call => RestrictNicknameString());
     }
 
     #endregion
 
     #region Methods
 
-    public void ConfirmNickname ()
+    public void Show()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void ConfirmNickname()
     {
         MatchCollection matches = Regex.Matches(nicknameInputField.text, regexPattern);
         string newNickname = String.Empty;
@@ -48,6 +60,7 @@ public class NicknameHandler : MonoBehaviour
         else
         {
             connectionSettings.nickname = newNickname;
+            connectionSettings.isNewUser = false;
             OnNicknameConfirmation?.Invoke();
         }
     }
@@ -56,6 +69,11 @@ public class NicknameHandler : MonoBehaviour
     {
         inputFieldPlaceholder.text = text;
         inputFieldPlaceholder.color = color;
+    }
+
+    private void RestrictNicknameString()
+    {
+        nicknameInputField.text = Regex.Replace(nicknameInputField.text, restrictionPattern, "");
     }
 
     #endregion

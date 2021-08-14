@@ -1,8 +1,8 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ConnectionManager : MonoBehaviourPunCallbacks
 {
@@ -10,19 +10,34 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
 
     public ConnectionSettings connectionSettings = null;
 
+    public event Action OnNewUser;
+    public event Action OnConnectingEnd;
+
     #endregion
 
     #region UnityCallbacks
 
-    private void Start()
-    {
-        if (connectionSettings)
-            Connect();
-    }
+    
 
     #endregion
 
     #region Methods
+
+    public bool Initiate()
+    {
+        if (connectionSettings)
+        {
+            if (connectionSettings.isNewUser)
+            {
+                OnNewUser?.Invoke();
+                return false;
+            }
+            else
+                Connect();
+            return true;
+        }
+        return false;
+    }
 
     private void Connect()
     {
@@ -46,21 +61,18 @@ public class ConnectionManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.JoinLobby();
         }
+        OnConnectingEnd?.Invoke();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         print("Disconnected from master " + cause);
+        OnConnectingEnd?.Invoke();
     }
 
     public override void OnJoinedLobby()
     {
         print("Joined Lobby");
-    }
-
-    public void NewUser()
-    {
-
     }
 
     #endregion
