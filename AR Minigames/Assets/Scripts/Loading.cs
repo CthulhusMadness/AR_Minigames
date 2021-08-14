@@ -35,7 +35,7 @@ public class Loading : MonoBehaviour
         loadingText.enabled = true;
         if (coroutine != null)
             StopCoroutine(coroutine);
-        coroutine = LoadingDelayed();
+        coroutine = LoadingRoutine();
         StartCoroutine(coroutine);
     }
 
@@ -47,7 +47,7 @@ public class Loading : MonoBehaviour
     }
 
 
-    private IEnumerator LoadingDelayed()
+    private IEnumerator LoadingRoutine()
     {
         loadingText.text = string.Empty;
         while (isLoading)

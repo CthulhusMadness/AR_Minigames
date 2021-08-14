@@ -7,6 +7,7 @@ public class ConnectionSettings : ScriptableObject
 {
     public string gameVersion = "1";
     public string nickname = "user";
+    public bool isNewUser = true;
     public string Nickname 
     {
         get {
