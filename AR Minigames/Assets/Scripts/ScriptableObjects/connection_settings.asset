@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: connection_settings
   m_EditorClassIdentifier: 
   gameVersion: 1
-  nickname: user
+  nickname: mlem_2021
+  isNewUser: 1
   serializationRate: 10
   sendRate: 20
