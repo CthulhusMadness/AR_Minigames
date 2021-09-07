@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuUI : MonoBehaviour
@@ -8,6 +7,7 @@ public class MenuUI : MonoBehaviour
 
     [SerializeField] private ConnectionManager connectionManager = null;
     [SerializeField] private NicknameHandler nicknameHandler = null;
+    [SerializeField] private GameObject mainMenuPanel = null;
 
     public Loading loading = null;
 
@@ -21,7 +21,8 @@ public class MenuUI : MonoBehaviour
     private void Start()
     {
         connectionManager.OnNewUser += nicknameHandler.Show;
-        connectionManager.OnConnectingEnd += loading.StopLoading;
+        connectionManager.OnConnectionEnd += loading.StopLoading;
+        connectionManager.OnConnectionEnd += () => mainMenuPanel.SetActive(true);
         nicknameHandler.OnNicknameConfirmation += () =>
         {
             userConvaidationCompleted = true;

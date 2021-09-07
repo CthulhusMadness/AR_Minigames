@@ -22,7 +22,7 @@ public class Loading : MonoBehaviour
     private void Awake()
     {
         loadingText = GetComponent<TMP_Text>();
-        loadingText.enabled = false;
+        gameObject.SetActive(false);
     }
 
     #endregion
@@ -32,7 +32,7 @@ public class Loading : MonoBehaviour
     public void StartLoading()
     {
         isLoading = true;
-        loadingText.enabled = true;
+        gameObject.SetActive(true);
         if (coroutine != null)
             StopCoroutine(coroutine);
         coroutine = LoadingRoutine();
@@ -42,8 +42,8 @@ public class Loading : MonoBehaviour
     public void StopLoading()
     {
         isLoading = false;
-        loadingText.enabled = false;
         StopCoroutine(coroutine);
+        gameObject.SetActive(false);
     }
 
 
